@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Star, ShoppingCart, Heart, TrendingUp, Award, Zap } from 'lucide-react-native';
+import { ArrowLeft, Star, ShoppingCart, Heart, TrendingUp, Award, Zap } from 'lucide-react-native';
 
 export default function FeaturedScreen() {
   const featuredSections = [
@@ -101,8 +101,8 @@ export default function FeaturedScreen() {
   };
 
   const handleSectionPress = (sectionId: string) => {
-    // Navigate to a filtered view or dedicated section page
-    console.log(`Navigate to ${sectionId} section`);
+    // Navigate to a filtered explore view for the specific section
+    router.push(`/(tabs)/explore?filter=${sectionId}`);
   };
 
   return (
@@ -110,8 +110,13 @@ export default function FeaturedScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Featured</Text>
-          <Text style={styles.subtitle}>Discover our top picks and trending products</Text>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <ArrowLeft color="#1C1C1E" size={24} strokeWidth={2} />
+          </TouchableOpacity>
+          <View style={styles.headerContent}>
+            <Text style={styles.title}>Featured Products</Text>
+            <Text style={styles.subtitle}>Discover our top picks and trending products</Text>
+          </View>
         </View>
 
         {/* Featured Sections */}
@@ -246,8 +251,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F7',
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 24,
     paddingBottom: 16,
+  },
+  backButton: {
+    marginRight: 16,
+  },
+  headerContent: {
+    flex: 1,
   },
   title: {
     fontSize: 32,

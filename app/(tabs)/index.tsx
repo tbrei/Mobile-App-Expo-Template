@@ -27,13 +27,17 @@ export default function HomeScreen() {
   const categories = [
     { icon: ShoppingBag, label: 'Electronics', color: '#007AFF', count: 24, route: 'electronics' },
     { icon: Package, label: 'Accessories', color: '#34C759', count: 18, route: 'accessories' },
-    { icon: TrendingUp, label: 'Trending', color: '#FF9500', count: 12 },
-    { icon: Star, label: 'Featured', color: '#FF3B30', count: 8 },
+    { icon: TrendingUp, label: 'Trending', color: '#FF9500', count: 12, route: 'featured' },
+    { icon: Star, label: 'Featured', color: '#FF3B30', count: 8, route: 'featured' },
   ];
 
   const handleCategoryPress = (route?: string) => {
     if (route) {
-      router.push(`/(tabs)/categories/${route}`);
+      if (route === 'featured') {
+        router.push('/featured');
+      } else {
+        router.push(`/(tabs)/categories/${route}`);
+      }
     }
   };
 
@@ -79,7 +83,7 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Featured Products</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/featured')}>
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
           </View>

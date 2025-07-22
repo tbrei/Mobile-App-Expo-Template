@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, Search, User, Star } from 'lucide-react-native';
+import { Chrome as Home, Search, User } from 'lucide-react-native';
 import { StyleSheet } from 'react-native';
 
 export default function TabLayout() {
@@ -27,15 +27,6 @@ export default function TabLayout() {
           title: 'Explore',
           tabBarIcon: ({ color, size }) => (
             <Search color={color} size={size} strokeWidth={2} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="featured"
-        options={{
-          title: 'Featured',
-          tabBarIcon: ({ color, size }) => (
-            <Star color={color} size={size} strokeWidth={2} />
           ),
         }}
       />
