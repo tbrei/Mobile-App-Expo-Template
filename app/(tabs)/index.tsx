@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { ShoppingBag, Star, TrendingUp, Package } from 'lucide-react-native';
 
 export default function HomeScreen() {
@@ -24,11 +25,21 @@ export default function HomeScreen() {
   ];
 
   const categories = [
-    { icon: ShoppingBag, label: 'Electronics', color: '#007AFF', count: 24 },
-    { icon: Package, label: 'Accessories', color: '#34C759', count: 18 },
+    { icon: ShoppingBag, label: 'Electronics', color: '#007AFF', count: 24, route: 'electronics' },
+    { icon: Package, label: 'Accessories', color: '#34C759', count: 18, route: 'accessories' },
     { icon: TrendingUp, label: 'Trending', color: '#FF9500', count: 12 },
     { icon: Star, label: 'Featured', color: '#FF3B30', count: 8 },
   ];
+
+  const handleCategoryPress = (route?: string) => {
+    if (route) {
+      router.push(`/(tabs)/categories/${route}`);
+    }
+  };
+
+  const handleProductPress = (productId: number) => {
+    router.push(`/product/${productId}`);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -48,7 +59,11 @@ export default function HomeScreen() {
             {categories.map((category, index) => {
               const IconComponent = category.icon;
               return (
-                <TouchableOpacity key={index} style={styles.categoryCard}>
+                <TouchableOpacity 
+                  key={index} 
+                  style={styles.categoryCard}
+                  onPress={() => handleCategoryPress(category.route)}
+                >
                   <View style={[styles.iconContainer, { backgroundColor: category.color }]}>
                     <IconComponent color="white" size={24} strokeWidth={2} />
                   </View>
@@ -71,7 +86,11 @@ export default function HomeScreen() {
           
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.productsScroll}>
             {featuredProducts.map((product) => (
-              <TouchableOpacity key={product.id} style={styles.productCard}>
+              <TouchableOpacity 
+                key={product.id} 
+                style={styles.productCard}
+                onPress={() => handleProductPress(product.id)}
+              >
                 {product.badge && (
                   <View style={[styles.badge, product.badge === 'New' ? styles.newBadge : styles.bestSellerBadge]}>
                     <Text style={styles.badgeText}>{product.badge}</Text>

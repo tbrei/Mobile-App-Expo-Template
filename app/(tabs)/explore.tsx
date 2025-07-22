@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { Search, Filter, Star, ShoppingCart, Heart } from 'lucide-react-native';
 
 export default function ExploreScreen() {
@@ -74,6 +75,10 @@ export default function ExploreScreen() {
     },
   ];
 
+  const handleProductPress = (productId: number) => {
+    router.push(`/product/${productId}`);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -122,7 +127,11 @@ export default function ExploreScreen() {
           
           <View style={styles.productsGrid}>
             {products.map((product) => (
-              <TouchableOpacity key={product.id} style={styles.productCard}>
+              <TouchableOpacity 
+                key={product.id} 
+                style={styles.productCard}
+                onPress={() => handleProductPress(product.id)}
+              >
                 {product.discount && (
                   <View style={styles.discountBadge}>
                     <Text style={styles.discountText}>-{product.discount}%</Text>
