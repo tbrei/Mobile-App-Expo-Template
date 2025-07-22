@@ -36,7 +36,7 @@ export default function HomeScreen() {
       if (route === 'featured') {
         router.push('/featured');
       } else {
-        router.push(`/(tabs)/categories/${route}`);
+        router.push(`/categories/${route}`);
       }
     }
   };
