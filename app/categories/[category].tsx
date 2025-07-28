@@ -23,6 +23,7 @@ A modern, production-ready e-commerce mobile application template built with Exp
 ## 🛠 Tech Stack
 
 - **Framework**: [Expo](https://expo.dev/) (SDK 53+)
+)
 - **Language**: TypeScript
 - **Navigation**: Expo Router with file-based routing
 - **UI Components**: React Native with custom styled components
@@ -110,8 +111,8 @@ utils/
    ```
 
 4. **Run on your preferred platform**
-   - Press `i` for iOS Simulator
-   - Press `a` for Android Emulator
+   - Press `i\` for iOS Simulator
+   - Press `a\` for Android Emulator
    - Scan QR code with Expo Go app for physical device testing
 
 ## 📦 Customization Guide
@@ -128,7 +129,7 @@ utils/
 - Integrate with your preferred backend API
 
 ### 3. Navigation
-- Add new screens in the `app/` directory
+- Add new screens in the `app/\` directory
 - Modify tab bar in `app/(tabs)/_layout.tsx`
 - Update navigation logic in components
 
@@ -412,7 +413,7 @@ CREATE TABLE coupons (
 
 ### Environment Variables
 
-Create a `.env` file with the following variables:
+Create a `.env\` file with the following variables:
 
 ```env
 # Supabase
@@ -445,7 +446,7 @@ EXPO_PUBLIC_APP_URL=your_app_url
 
 #### 3. Replace Mock Data
 
-Create a `lib/supabase.ts` file:
+Create a `lib/supabase.ts\` file:
 ```typescript
 import { createClient } from '@supabase/supabase-js';
 
