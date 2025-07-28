@@ -198,7 +198,6 @@ export default function FeaturedScreen() {
                         )}
                       </View>
                       
-                      <TouchableOpacity style={[styles.addToCartButton, { backgroundColor: section.color }]}>
                       <TouchableOpacity 
                         style={[styles.addToCartButton, { backgroundColor: section.color }]}
                         onPress={() => handleAddToCart(product)}
