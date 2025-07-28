@@ -72,6 +72,75 @@ export default function CategoryScreen() {
         }
       ]
     },
+    accessories: {
+      name: 'Accessories',
+      products: [
+        {
+          id: 7,
+          name: 'Wireless Charging Pad',
+          price: 49,
+          originalPrice: 69,
+          image: 'https://images.pexels.com/photos/4526414/pexels-photo-4526414.jpeg?auto=compress&cs=tinysrgb&w=300',
+          rating: 4.6,
+          reviews: 203,
+          inStock: true,
+          category: 'accessories'
+        },
+        {
+          id: 8,
+          name: 'USB-C to Lightning Cable',
+          price: 29,
+          originalPrice: 39,
+          image: 'https://images.pexels.com/photos/163100/circuit-circuit-board-resistor-computer-163100.jpeg?auto=compress&cs=tinysrgb&w=300',
+          rating: 4.5,
+          reviews: 167,
+          inStock: true,
+          category: 'accessories'
+        },
+        {
+          id: 9,
+          name: 'Adjustable Phone Stand',
+          price: 24,
+          image: 'https://images.pexels.com/photos/1841841/pexels-photo-1841841.jpeg?auto=compress&cs=tinysrgb&w=300',
+          rating: 4.7,
+          reviews: 89,
+          inStock: true,
+          category: 'accessories'
+        },
+        {
+          id: 10,
+          name: 'Car Phone Mount',
+          price: 19,
+          originalPrice: 29,
+          image: 'https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=300',
+          rating: 4.4,
+          reviews: 134,
+          inStock: false,
+          category: 'accessories'
+        },
+        {
+          id: 11,
+          name: 'Laptop Sleeve Case',
+          price: 39,
+          image: 'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=300',
+          rating: 4.8,
+          reviews: 245,
+          inStock: true,
+          category: 'accessories'
+        },
+        {
+          id: 12,
+          name: 'Portable Power Bank',
+          price: 59,
+          originalPrice: 79,
+          image: 'https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&w=300',
+          rating: 4.6,
+          reviews: 178,
+          inStock: true,
+          category: 'accessories'
+        }
+      ]
+    },
     home: {
       name: 'Home & Garden',
       products: [
