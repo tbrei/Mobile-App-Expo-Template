@@ -25,8 +25,8 @@ export default function HomeScreen() {
   ];
 
   const categories = [
-    { icon: ShoppingBag, label: 'Electronics', color: '#007AFF', count: 3, route: 'electronics' },
-    { icon: Package, label: 'Accessories', color: '#34C759', count: 6, route: 'accessories' },
+    { icon: ShoppingBag, label: 'Electronics', color: '#007AFF', count: 24, route: 'electronics' },
+    { icon: Package, label: 'Accessories', color: '#34C759', count: 18, route: 'accessories' },
     { icon: TrendingUp, label: 'Trending', color: '#FF9500', count: 12, route: 'featured' },
     { icon: Star, label: 'Featured', color: '#FF3B30', count: 8, route: 'featured' },
   ];

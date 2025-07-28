@@ -74,13 +74,13 @@ export const mockCategories: Category[] = [
     id: 'electronics',
     name: 'Electronics',
     description: 'Latest tech gadgets and devices',
-    productCount: 3
+    productCount: 24
   },
   {
     id: 'accessories',
     name: 'Accessories',
     description: 'Essential tech accessories and add-ons',
-    productCount: 6
+    productCount: 18
   }
 ];
 
