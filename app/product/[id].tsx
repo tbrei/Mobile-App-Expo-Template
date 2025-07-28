@@ -3,11 +3,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { ArrowLeft, Star, ShoppingCart, Heart, Share, Plus, Minus, Shield, Truck, RotateCcw } from 'lucide-react-native';
 import { useState } from 'react';
+import { useCart } from '@/contexts/CartContext';
 
 const { width } = Dimensions.get('window');
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams();
+  const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -57,7 +59,15 @@ export default function ProductDetailScreen() {
   };
 
   const handleAddToCart = () => {
-    // Add to cart logic here
+    for (let i = 0; i < quantity; i++) {
+      addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.images[0],
+      });
+    }
+    // Show success feedback - you could replace with a toast notification
     console.log(`Added ${quantity} of product ${id} to cart`);
   };
 

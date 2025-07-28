@@ -2,8 +2,10 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Search, Filter, Star, ShoppingCart, Heart } from 'lucide-react-native';
+import { useCart } from '@/contexts/CartContext';
 
 export default function ExploreScreen() {
+  const { addItem } = useCart();
   const categories = [
     { id: 1, name: 'All', active: true },
     { id: 2, name: 'Electronics', active: false },
@@ -77,6 +79,15 @@ export default function ExploreScreen() {
 
   const handleProductPress = (productId: number) => {
     router.push(`/product/${productId}`);
+  };
+
+  const handleAddToCart = (product: any) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    });
   };
 
   return (
@@ -169,6 +180,7 @@ export default function ExploreScreen() {
                   <TouchableOpacity 
                     style={[styles.addToCartButton, !product.inStock && styles.disabledButton]}
                     disabled={!product.inStock}
+                    onPress={() => handleAddToCart(product)}
                   >
                     <ShoppingCart color={product.inStock ? 'white' : '#8E8E93'} size={16} strokeWidth={2} />
                     <Text style={[styles.addToCartText, !product.inStock && styles.disabledButtonText]}>

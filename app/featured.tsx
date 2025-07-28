@@ -2,8 +2,10 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ArrowLeft, Star, ShoppingCart, Heart, TrendingUp, Award, Zap } from 'lucide-react-native';
+import { useCart } from '@/contexts/CartContext';
 
 export default function FeaturedScreen() {
+  const { addItem } = useCart();
   const featuredSections = [
     {
       id: 'trending',
@@ -105,6 +107,15 @@ export default function FeaturedScreen() {
     router.push(`/(tabs)/explore?filter=${sectionId}`);
   };
 
+  const handleAddToCart = (product: any) => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -188,6 +199,10 @@ export default function FeaturedScreen() {
                       </View>
                       
                       <TouchableOpacity style={[styles.addToCartButton, { backgroundColor: section.color }]}>
+                      <TouchableOpacity 
+                        style={[styles.addToCartButton, { backgroundColor: section.color }]}
+                        onPress={() => handleAddToCart(product)}
+                      >
                         <ShoppingCart color="white" size={16} strokeWidth={2} />
                         <Text style={styles.addToCartText}>Add to Cart</Text>
                       </TouchableOpacity>
