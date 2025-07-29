@@ -65,8 +65,14 @@ order_items (id, order_id, product_id, quantity, price_at_time)
    - Replace `categoryData` with dynamic category queries
    - Add real product filtering and search
 
-3. **Product Details** (`app/product/[id].tsx`)
+3. **Product Detail Connection** (`app/product/[id].tsx`)
    - Replace static `product` object with `supabase.from('products').select().eq('id', id)`
+   - **CRITICAL**: Update all product listing components to use real product IDs:
+     - Home page featured products: Update `featuredProducts` array with real database IDs
+     - Category pages: Ensure `categoryData.products` use real database IDs  
+     - Explore page: Update `products` array with real database IDs
+     - Featured page: Update `featuredSections.products` with real database IDs
+   - The navigation uses `router.push(\`/product/\${productId}\`)` - ensure `productId` matches your database
    - Add real product images and specifications
 
 4. **User Authentication** (`app/(tabs)/profile.tsx`)
