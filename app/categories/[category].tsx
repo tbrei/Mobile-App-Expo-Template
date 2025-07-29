@@ -7,7 +7,7 @@ import ProductCard from '@/components/ProductCard';
 
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams();
-  const { addItem, updateQuantity, getItemInCart } = useCart();</parameter>
+  const { addItem, updateQuantity, getItemInCart } = useCart();
   
   // Mock data - replace with API calls
   const categoryData = {
