@@ -152,6 +152,7 @@ export default function FeaturedScreen() {
                     <ProductCard
                       product={product}
                       onPress={() => handleProductPress(product.id)}
+                      containerStyle={{ width: 200 }}
                     />
                   </View>
                 ))}

@@ -19,13 +19,15 @@ interface ProductCardProps {
   onPress: (productId: number) => void;
   onToggleFavorite?: (productId: number) => void;
   isFavorite?: boolean;
+  containerStyle?: object;
 }
 
 export default function ProductCard({ 
   product, 
   onPress, 
   onToggleFavorite, 
-  isFavorite = false 
+  isFavorite = false,
+  containerStyle
 }: ProductCardProps) {
   const { state, addItem, removeItem, updateQuantity } = useCart();
   
@@ -61,7 +63,7 @@ export default function ProductCard({
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress(product.id)}>
+    <TouchableOpacity style={[styles.container, containerStyle]} onPress={() => onPress(product.id)}>
       {product.discount && (
         <View style={styles.discountBadge}>
           <Text style={styles.discountText}>-{product.discount}%</Text>
