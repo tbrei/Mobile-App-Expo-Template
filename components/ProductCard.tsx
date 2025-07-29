@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Star, ShoppingCart, Heart } from 'lucide-react-native';
+import { Star, ShoppingCart, Heart, Plus, Minus, Eye } from 'lucide-react-native';
+import { router } from 'expo-router';
 
 interface Product {
   id: number;
@@ -17,17 +18,35 @@ interface ProductCardProps {
   product: Product;
   onPress: (productId: number) => void;
   onAddToCart?: (productId: number) => void;
+  onUpdateQuantity?: (productId: number, quantity: number) => void;
   onToggleFavorite?: (productId: number) => void;
   isFavorite?: boolean;
+  cartItem?: { id: number; quantity: number } | undefined;
 }
 
 export default function ProductCard({ 
   product, 
   onPress, 
   onAddToCart, 
+  onUpdateQuantity,
   onToggleFavorite, 
-  isFavorite = false 
+  isFavorite = false,
+  cartItem
 }: ProductCardProps) {
+  const isInCart = !!cartItem;
+  
+  const handleQuantityChange = (change: number) => {
+    const newQuantity = (cartItem?.quantity || 0) + change;
+    if (newQuantity <= 0) {
+      onUpdateQuantity?.(product.id, 0);
+    } else {
+      onUpdateQuantity?.(product.id, newQuantity);
+    }
+  };
+
+  const handleViewCart = () => {
+    router.push('/(tabs)/cart');
+  };</parameter>
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress(product.id)}>
       {product.discount && (
@@ -73,16 +92,40 @@ export default function ProductCard({
           </Text>
         </View>
         
-        <TouchableOpacity 
-          style={[styles.addToCartButton, !product.inStock && styles.disabledButton]}
-          disabled={!product.inStock}
-          onPress={() => onAddToCart?.(product.id)}
-        >
-          <ShoppingCart color={product.inStock ? 'white' : '#8E8E93'} size={16} strokeWidth={2} />
-          <Text style={[styles.addToCartText, !product.inStock && styles.disabledButtonText]}>
-            {product.inStock ? 'Add to Cart' : 'Unavailable'}
-          </Text>
-        </TouchableOpacity>
+        {!isInCart ? (
+          <TouchableOpacity 
+            style={[styles.addToCartButton, !product.inStock && styles.disabledButton]}
+            disabled={!product.inStock}
+            onPress={() => onAddToCart?.(product.id)}
+          >
+            <ShoppingCart color={product.inStock ? 'white' : '#8E8E93'} size={16} strokeWidth={2} />
+            <Text style={[styles.addToCartText, !product.inStock && styles.disabledButtonText]}>
+              {product.inStock ? 'Add to Cart' : 'Unavailable'}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.cartControlsContainer}>
+            <View style={styles.quantityControls}>
+              <TouchableOpacity 
+                style={styles.quantityButton}
+                onPress={() => handleQuantityChange(-1)}
+              >
+                <Minus color="#007AFF" size={16} strokeWidth={2} />
+              </TouchableOpacity>
+              <Text style={styles.quantityText}>{cartItem?.quantity || 0}</Text>
+              <TouchableOpacity 
+                style={styles.quantityButton}
+                onPress={() => handleQuantityChange(1)}
+              >
+                <Plus color="#007AFF" size={16} strokeWidth={2} />
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity style={styles.viewCartButton} onPress={handleViewCart}>
+              <Eye color="#007AFF" size={14} strokeWidth={2} />
+              <Text style={styles.viewCartText}>View Cart</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -210,5 +253,42 @@ const styles = StyleSheet.create({
   },
   disabledButtonText: {
     color: '#8E8E93',
+  },
+  cartControlsContainer: {
+    gap: 8,
+  },
+  quantityControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F2F2F7',
+    borderRadius: 8,
+    padding: 4,
+  },
+  quantityButton: {
+    padding: 8,
+  },
+  quantityText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+    marginHorizontal: 12,
+    minWidth: 20,
+    textAlign: 'center',
+  },
+  viewCartButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F2F2F7',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+  },
+  viewCartText: {
+    color: '#007AFF',
+    fontSize: 12,
+    fontWeight: '600',
+    marginLeft: 4,
   },
 });
