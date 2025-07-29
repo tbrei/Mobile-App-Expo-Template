@@ -3,10 +3,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Search, Filter, Star, ShoppingCart, Heart } from 'lucide-react-native';
 import { useCart } from '@/contexts/CartContext';
-import ProductCard from '@/components/ProductCard';
 
 export default function ExploreScreen() {
-  const { addItem, updateQuantity, getItemInCart } = useCart();
+  const { addItem } = useCart();
   const categories = [
     { id: 1, name: 'All', active: true },
     { id: 2, name: 'Electronics', active: false },
@@ -91,13 +90,6 @@ export default function ExploreScreen() {
     });
   };
 
-  const handleUpdateQuantity = (productId: number, quantity: number) => {
-    if (quantity === 0) {
-      updateQuantity(productId, 0);
-    } else {
-      updateQuantity(productId, quantity);
-    }
-  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -146,27 +138,57 @@ export default function ExploreScreen() {
           
           <View style={styles.productsGrid}>
             {products.map((product) => (
-              <View
+              <TouchableOpacity 
                 key={product.id} 
+                style={styles.productCard}
+                onPress={() => handleProductPress(product.id)}
               >
-                <ProductCard
-                  product={{
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    originalPrice: product.originalPrice,
-                    rating: product.rating,
-                    reviews: product.reviews,
-                    image: product.image,
-                    inStock: product.inStock,
-                    discount: product.discount,
-                  }}
-                  onPress={handleProductPress}
-                  onAddToCart={handleAddToCart}
-                  onUpdateQuantity={handleUpdateQuantity}
-                  cartItem={getItemInCart(product.id)}
-                />
-              </View>
+                {product.discount && (
+                  <View style={styles.discountBadge}>
+                    <Text style={styles.discountText}>-{product.discount}%</Text>
+                  </View>
+                )}
+                <TouchableOpacity style={styles.favoriteButton}>
+                  <Heart color="#8E8E93" size={18} strokeWidth={2} />
+                </TouchableOpacity>
+                
+                <Image source={{ uri: product.image }} style={styles.productImage} />
+                
+                <View style={styles.productInfo}>
+                  <Text style={styles.productName} numberOfLines={2}>{product.name}</Text>
+                  
+                  <View style={styles.ratingContainer}>
+                    <Star color="#FF9500" size={14} strokeWidth={2} fill="#FF9500" />
+                    <Text style={styles.ratingText}>{product.rating}</Text>
+                    <Text style={styles.reviewsText}>({product.reviews})</Text>
+                  </View>
+                  
+                  <View style={styles.priceContainer}>
+                    <Text style={styles.price}>${product.price}</Text>
+                    {product.originalPrice && (
+                      <Text style={styles.originalPrice}>${product.originalPrice}</Text>
+                    )}
+                  </View>
+                  
+                  <View style={styles.stockContainer}>
+                    <View style={[styles.stockIndicator, { backgroundColor: product.inStock ? '#34C759' : '#FF3B30' }]} />
+                    <Text style={[styles.stockText, { color: product.inStock ? '#34C759' : '#FF3B30' }]}>
+                      {product.inStock ? 'In Stock' : 'Out of Stock'}
+                    </Text>
+                  </View>
+                  
+                  <TouchableOpacity 
+                    style={[styles.addToCartButton, !product.inStock && styles.disabledButton]}
+                    disabled={!product.inStock}
+                    onPress={() => handleAddToCart(product)}
+                  >
+                    <ShoppingCart color={product.inStock ? 'white' : '#8E8E93'} size={16} strokeWidth={2} />
+                    <Text style={[styles.addToCartText, !product.inStock && styles.disabledButtonText]}>
+                      {product.inStock ? 'Add to Cart' : 'Unavailable'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
@@ -285,5 +307,127 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     paddingHorizontal: 16,
     justifyContent: 'space-between',
+  },
+  productCard: {
+    width: '48%',
+    backgroundColor: 'white',
+    borderRadius: 16,
+    marginBottom: 16,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  discountBadge: {
+    position: 'absolute',
+    top: 12,
+    left: 12,
+    backgroundColor: '#FF3B30',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    zIndex: 2,
+  },
+  discountText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  favoriteButton: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 8,
+    zIndex: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  productImage: {
+    width: '100%',
+    height: 140,
+  },
+  productInfo: {
+    padding: 12,
+  },
+  productName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1C1C1E',
+    marginBottom: 8,
+    lineHeight: 20,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  ratingText: {
+    fontSize: 13,
+    color: '#1C1C1E',
+    marginLeft: 4,
+    fontWeight: '500',
+  },
+  reviewsText: {
+    fontSize: 13,
+    color: '#8E8E93',
+    marginLeft: 4,
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#007AFF',
+  },
+  originalPrice: {
+    fontSize: 13,
+    color: '#8E8E93',
+    textDecorationLine: 'line-through',
+    marginLeft: 8,
+  },
+  stockContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  stockIndicator: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 6,
+  },
+  stockText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  addToCartButton: {
+    backgroundColor: '#007AFF',
+    borderRadius: 8,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#F2F2F7',
+  },
+  addToCartText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  disabledButtonText: {
+    color: '#8E8E93',
   },
 });
