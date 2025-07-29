@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { ArrowLeft, TrendingUp, Award, Zap } from 'lucide-react-native';
+import { ArrowLeft, TrendingUp, Award, Zap, Star } from 'lucide-react-native';
 import ProductCard from '@/components/ProductCard';
 import CheckoutFooter from '@/components/CheckoutFooter';
 
