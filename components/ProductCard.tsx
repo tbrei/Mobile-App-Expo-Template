@@ -46,7 +46,7 @@ export default function ProductCard({
 
   const handleViewCart = () => {
     router.push('/(tabs)/cart');
-  };</parameter>
+  };
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress(product.id)}>
       {product.discount && (
