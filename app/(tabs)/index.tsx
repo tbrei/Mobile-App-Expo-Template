@@ -88,6 +88,7 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           
+           contentContainerStyle={styles.productsScrollContent}
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.productsScroll}>
             {featuredProducts.map((product) => (
               <TouchableOpacity 
@@ -245,6 +246,9 @@ const styles = StyleSheet.create({
     marginHorizontal: -24,
     paddingHorizontal: 24,
     paddingBottom: 10,
+  },
+  productsScrollContent: {
+    paddingRight: 24,
   },
   productCard: {
     width: 200,

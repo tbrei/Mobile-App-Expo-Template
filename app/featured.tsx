@@ -143,6 +143,7 @@ export default function FeaturedScreen() {
                 </TouchableOpacity>
               </View>
 
+               contentContainerStyle={styles.productsScrollContent}
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.productsScroll}>
                 {section.products.map((product, index) => (
                   <View
@@ -280,6 +281,9 @@ const styles = StyleSheet.create({
   productsScroll: {
     marginHorizontal: -24,
     paddingHorizontal: 24,
+  },
+  productsScrollContent: {
+    paddingRight: 24,
   },
   productCard: {
     width: 200,
