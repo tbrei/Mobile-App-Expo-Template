@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { ArrowLeft, Star, ShoppingCart, Heart, Filter } from 'lucide-react-native';
 import ProductCard from '@/components/ProductCard';
+import CheckoutFooter from '@/components/CheckoutFooter';
 
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams();
@@ -165,7 +166,8 @@ export default function CategoryScreen() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity 
@@ -205,7 +207,9 @@ export default function CategoryScreen() {
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+      <CheckoutFooter />
+    </View>
   );
 }
 
@@ -213,6 +217,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8F9FA',
+  },
+  safeArea: {
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
