@@ -108,6 +108,8 @@ export default function HomeScreen() {
                 key={product.id} 
                 style={styles.productCard}
                 onPress={() => handleProductPress(product.id)}
+               activeOpacity={1}
+               delayPressIn={100}
               >
                 {product.badge && (
                   <View style={[styles.badge, product.badge === 'New' ? styles.newBadge : styles.bestSellerBadge]}>
