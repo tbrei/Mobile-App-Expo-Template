@@ -21,7 +21,16 @@ export default function HomeScreen() {
       rating: 4.9,
       image: 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=800',
       badge: 'New'
-    }
+    },
+    {
+      id: 3,
+      name: 'Premium Wireless Headphones',
+      price: 299,
+      originalPrice: 399,
+      rating: 4.8,
+      image: 'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=800',
+      badge: 'Best Seller'
+    },
   ];
 
   const categories = [
