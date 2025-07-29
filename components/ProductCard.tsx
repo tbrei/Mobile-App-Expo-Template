@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Star, ShoppingCart, Heart } from 'lucide-react-native';
+import { Star, ShoppingCart, Heart, Plus, Minus } from 'lucide-react-native';
+import { useCart } from '@/contexts/CartContext';
 
 interface Product {
   id: number;
@@ -16,7 +17,6 @@ interface Product {
 interface ProductCardProps {
   product: Product;
   onPress: (productId: number) => void;
-  onAddToCart?: (productId: number) => void;
   onToggleFavorite?: (productId: number) => void;
   isFavorite?: boolean;
 }
@@ -24,10 +24,42 @@ interface ProductCardProps {
 export default function ProductCard({ 
   product, 
   onPress, 
-  onAddToCart, 
   onToggleFavorite, 
   isFavorite = false 
 }: ProductCardProps) {
+  const { state, addItem, removeItem, updateQuantity } = useCart();
+  
+  // Find if this product is in the cart and get its quantity
+  const cartItem = state.items.find(item => item.id === product.id);
+  const quantityInCart = cartItem ? cartItem.quantity : 0;
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    });
+  };
+
+  const handleIncreaseQuantity = () => {
+    if (cartItem) {
+      updateQuantity(product.id, cartItem.quantity + 1);
+    } else {
+      handleAddToCart();
+    }
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (cartItem) {
+      if (cartItem.quantity === 1) {
+        removeItem(product.id);
+      } else {
+        updateQuantity(product.id, cartItem.quantity - 1);
+      }
+    }
+  };
+
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress(product.id)}>
       {product.discount && (
@@ -73,16 +105,27 @@ export default function ProductCard({
           </Text>
         </View>
         
-        <TouchableOpacity 
-          style={[styles.addToCartButton, !product.inStock && styles.disabledButton]}
-          disabled={!product.inStock}
-          onPress={() => onAddToCart?.(product.id)}
-        >
-          <ShoppingCart color={product.inStock ? 'white' : '#8E8E93'} size={16} strokeWidth={2} />
-          <Text style={[styles.addToCartText, !product.inStock && styles.disabledButtonText]}>
-            {product.inStock ? 'Add to Cart' : 'Unavailable'}
-          </Text>
-        </TouchableOpacity>
+        {!product.inStock ? (
+          <TouchableOpacity style={styles.disabledButton} disabled>
+            <ShoppingCart color="#8E8E93" size={16} strokeWidth={2} />
+            <Text style={styles.disabledButtonText}>Unavailable</Text>
+          </TouchableOpacity>
+        ) : quantityInCart > 0 ? (
+          <View style={styles.quantityControls}>
+            <TouchableOpacity style={styles.quantityButton} onPress={handleDecreaseQuantity}>
+              <Minus color="#007AFF" size={16} strokeWidth={2} />
+            </TouchableOpacity>
+            <Text style={styles.quantityText}>{quantityInCart}</Text>
+            <TouchableOpacity style={styles.quantityButton} onPress={handleIncreaseQuantity}>
+              <Plus color="#007AFF" size={16} strokeWidth={2} />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity style={styles.addToCartButton} onPress={handleAddToCart}>
+            <ShoppingCart color="white" size={16} strokeWidth={2} />
+            <Text style={styles.addToCartText}>Add to Cart</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -201,6 +244,11 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#F2F2F7',
+    borderRadius: 8,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addToCartText: {
     color: 'white',
@@ -210,5 +258,35 @@ const styles = StyleSheet.create({
   },
   disabledButtonText: {
     color: '#8E8E93',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  quantityControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F2F2F7',
+    borderRadius: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+  },
+  quantityButton: {
+    backgroundColor: 'white',
+    borderRadius: 6,
+    padding: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  quantityText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1C1C1E',
+    marginHorizontal: 16,
+    minWidth: 24,
+    textAlign: 'center',
   },
 });

@@ -2,10 +2,8 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Search, Filter, Star, ShoppingCart, Heart } from 'lucide-react-native';
-import { useCart } from '@/contexts/CartContext';
 
 export default function ExploreScreen() {
-  const { addItem } = useCart();
   const categories = [
     { id: 1, name: 'All', active: true },
     { id: 2, name: 'Electronics', active: false },
@@ -79,15 +77,6 @@ export default function ExploreScreen() {
 
   const handleProductPress = (productId: number) => {
     router.push(`/product/${productId}`);
-  };
-
-  const handleAddToCart = (product: any) => {
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-    });
   };
 
   return (
@@ -177,16 +166,14 @@ export default function ExploreScreen() {
                     </Text>
                   </View>
                   
-                  <TouchableOpacity 
-                    style={[styles.addToCartButton, !product.inStock && styles.disabledButton]}
-                    disabled={!product.inStock}
-                    onPress={() => handleAddToCart(product)}
-                  >
-                    <ShoppingCart color={product.inStock ? 'white' : '#8E8E93'} size={16} strokeWidth={2} />
-                    <Text style={[styles.addToCartText, !product.inStock && styles.disabledButtonText]}>
-                      {product.inStock ? 'Add to Cart' : 'Unavailable'}
-                    </Text>
-                  </TouchableOpacity>
+                  {!product.inStock ? (
+                    <View style={styles.disabledButton}>
+                      <ShoppingCart color="#8E8E93" size={16} strokeWidth={2} />
+                      <Text style={styles.disabledButtonText}>Unavailable</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.cartButtonPlaceholder} />
+                  )}
                 </View>
               </TouchableOpacity>
             ))}
@@ -410,24 +397,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
   },
-  addToCartButton: {
-    backgroundColor: '#007AFF',
+  disabledButton: {
+    backgroundColor: '#F2F2F7',
     borderRadius: 8,
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  disabledButton: {
-    backgroundColor: '#F2F2F7',
-  },
-  addToCartText: {
-    color: 'white',
+  disabledButtonText: {
+    color: '#8E8E93',
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 6,
   },
-  disabledButtonText: {
-    color: '#8E8E93',
+  cartButtonPlaceholder: {
+    height: 42, // Same height as cart buttons to maintain card consistency
   },
 });
