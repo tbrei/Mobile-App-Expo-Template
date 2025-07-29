@@ -143,8 +143,12 @@ export default function FeaturedScreen() {
                 </TouchableOpacity>
               </View>
 
-               contentContainerStyle={styles.productsScrollContent}
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.productsScroll}>
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false} 
+                style={styles.productsScroll}
+                contentContainerStyle={styles.productsScrollContent}
+              >
                 {section.products.map((product, index) => (
                   <View
                     key={product.id} 

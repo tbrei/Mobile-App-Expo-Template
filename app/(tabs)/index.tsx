@@ -88,8 +88,12 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           
-           contentContainerStyle={styles.productsScrollContent}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.productsScroll}>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false} 
+            style={styles.productsScroll}
+            contentContainerStyle={styles.productsScrollContent}
+          >
             {featuredProducts.map((product) => (
               <TouchableOpacity 
                 key={product.id} 
