@@ -1,110 +1,111 @@
 # TechStore - React Native E-commerce Template
 
-A complete e-commerce mobile app template built with Expo and React Native.
+A complete e-commerce mobile app template built with Expo and React Native featuring tab navigation, product browsing, shopping cart, and user profiles.
 
 ## 🚀 Current Features
 
-- **Tab Navigation**: Home, Explore, Cart, Profile
-- **Product Browsing**: Categories, search, product details
-- **Shopping Cart**: Add/remove items, quantity management
-- **User Interface**: Professional iOS-style design
+- **Tab Navigation**: Home, Explore, Cart, Profile screens
+- **Product Browsing**: Categories, search, detailed product pages
+- **Shopping Cart**: Add/remove items, quantity management, checkout flow
+- **User Interface**: Professional iOS-style design with smooth animations
 
 ## ⚠️ What's Currently Mock Data
 
-Everything! This template uses mock data and needs to be connected to real services:
+**Everything is mock data and needs database integration:**
 
-- **Products & Categories**: Static arrays in `utils/mockData.ts`
-- **User Authentication**: No real auth system
-- **Cart Persistence**: Only in memory, resets on app restart
-- **Payments**: No payment processing
-- **Orders**: No order management
+### Product Data
+- **Location**: `app/categories/[category].tsx` - `categoryData` object
+- **What to replace**: Static product arrays with database queries
+- **Files affected**: All product listing screens
+
+### User Authentication
+- **Location**: `app/(tabs)/profile.tsx` - Hardcoded user info
+- **What to replace**: Mock user data with Supabase Auth integration
+- **Files affected**: Profile screen, order history
+
+### Shopping Cart
+- **Location**: `contexts/CartContext.tsx` - In-memory only
+- **What to replace**: Add cart persistence to database/AsyncStorage
+- **Current limitation**: Cart resets on app restart
+
+### Product Details
+- **Location**: `app/product/[id].tsx` - Static product object
+- **What to replace**: Dynamic product fetching by ID
+- **Missing**: Real product images, specifications, reviews
+
+### Categories & Navigation
+- **Location**: `app/(tabs)/index.tsx` and `app/(tabs)/explore.tsx`
+- **What to replace**: Hardcoded category lists with dynamic data
+- **Files affected**: Home screen categories, explore filters
 
 ## 🛠 To Make This Production Ready
 
-### 1. Setup Database (Supabase recommended)
+### Step 1: Setup Database (Supabase recommended)
 
 Create these essential tables:
 
 ```sql
--- Categories
-CREATE TABLE categories (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text NOT NULL,
-  slug text UNIQUE NOT NULL,
-  image_url text,
-  created_at timestamptz DEFAULT now()
-);
-
--- Products
-CREATE TABLE products (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text NOT NULL,
-  price decimal(10,2) NOT NULL,
-  original_price decimal(10,2),
-  category_id uuid REFERENCES categories(id),
-  description text,
-  images text[] DEFAULT '{}',
-  rating decimal(3,2) DEFAULT 0,
-  stock_quantity integer DEFAULT 0,
-  stripe_product_id text,
-  is_active boolean DEFAULT true,
-  created_at timestamptz DEFAULT now()
-);
-
--- Users (extends Supabase auth)
-CREATE TABLE users (
-  id uuid PRIMARY KEY REFERENCES auth.users(id),
-  email text UNIQUE NOT NULL,
-  first_name text,
-  last_name text,
-  created_at timestamptz DEFAULT now()
-);
-
--- Orders
-CREATE TABLE orders (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid REFERENCES users(id),
-  status text DEFAULT 'pending',
-  total_amount decimal(10,2) NOT NULL,
-  stripe_payment_intent_id text,
-  created_at timestamptz DEFAULT now()
-);
+-- Core e-commerce tables
+categories (id, name, slug, image_url, created_at)
+products (id, name, price, category_id, description, images[], stock_quantity, stripe_product_id, created_at)
+users (id, email, first_name, last_name, created_at)
+cart_items (id, user_id, product_id, quantity, created_at)
+orders (id, user_id, status, total_amount, stripe_payment_intent_id, created_at)
+order_items (id, order_id, product_id, quantity, price_at_time)
 ```
 
-### 2. Replace Mock Data
+### Step 2: Replace Mock Data Calls
 
-Replace imports in `app/(tabs)/*.tsx` files:
+**Priority order for replacement:**
 
-```typescript
-// Replace this:
-import { mockProducts } from '@/utils/mockData';
+1. **Product Categories** (`app/(tabs)/index.tsx`, `app/(tabs)/explore.tsx`)
+   - Replace `categories` arrays with `supabase.from('categories').select()`
 
-// With database calls:
-import { supabase } from '@/lib/supabase';
-const { data: products } = await supabase.from('products').select('*');
-```
+2. **Product Listings** (`app/categories/[category].tsx`)
+   - Replace `categoryData` with dynamic category queries
+   - Add real product filtering and search
 
-### 3. Add Authentication
+3. **Product Details** (`app/product/[id].tsx`)
+   - Replace static `product` object with `supabase.from('products').select().eq('id', id)`
+   - Add real product images and specifications
 
-Install and configure Supabase Auth:
-```bash
-npm install @supabase/supabase-js
-```
+4. **User Authentication** (`app/(tabs)/profile.tsx`)
+   - Integrate Supabase Auth for login/signup
+   - Replace hardcoded user data with session data
 
-### 4. Add Payments
+5. **Shopping Cart** (`contexts/CartContext.tsx`)
+   - Add cart persistence to database
+   - Sync cart across devices for logged-in users
 
-Setup Stripe for payment processing:
-```bash
-npm install @stripe/stripe-react-native
-```
+### Step 3: Add Payments
 
-### 5. Environment Variables
+- Install Stripe React Native SDK
+- Add payment processing to checkout flow
+- Connect to Stripe products using `stripe_product_id` field
+
+### Step 4: Environment Setup
 
 ```env
-EXPO_PUBLIC_SUPABASE_URL=your_url
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_key
-STRIPE_PUBLISHABLE_KEY=pk_test_...
+EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+STRIPE_PUBLISHABLE_KEY=pk_test_your_key
 ```
+
+## 📁 Key Files to Modify
+
+### Mock Data Files (Replace First)
+- `app/categories/[category].tsx` - Category product listings
+- `app/(tabs)/index.tsx` - Home screen featured products
+- `app/(tabs)/explore.tsx` - Search and browse products
+- `app/product/[id].tsx` - Individual product details
+
+### Context & State Management
+- `contexts/CartContext.tsx` - Add cart persistence
+- Add user authentication context
+
+### Components (Update After Data)
+- `components/ProductCard.tsx` - May need props updates
+- `components/SearchBar.tsx` - Connect to real search
 
 ## 🚀 Getting Started
 
@@ -113,13 +114,14 @@ npm install
 npm run dev
 ```
 
-Press `i` for iOS or `a` for Android.
+Press `i` for iOS simulator or `a` for Android.
 
-## 📁 Key Files to Modify
+## 📝 Development Notes
 
-- `utils/mockData.ts` → Replace with database calls
-- `app/(tabs)/*.tsx` → Update to fetch real data
-- `contexts/CartContext.tsx` → Add persistence
-- `app/product/[id].tsx` → Connect to real product data
+- **Mock Data Duration**: Perfect for UI development and testing
+- **Real Data Priority**: Start with categories and products, then authentication
+- **Payment Testing**: Use Stripe test mode during development
+- **Image Storage**: Consider using Supabase Storage for product images
 
-That's it! Focus on database setup first, then replace the mock data calls one screen at a time.
+This template provides a solid foundation - focus on replacing the mock data layer first, then add authentication and payments.
+</parameter>
