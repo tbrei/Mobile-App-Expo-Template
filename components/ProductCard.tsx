@@ -67,7 +67,7 @@ export default function ProductCard({
       style={[styles.container, containerStyle]} 
       onPress={() => onPress(product.id)}
       delayPressIn={100}
-      activeOpacity={0.8}
+      activeOpacity={1}
     >
       {product.discount && (
         <View style={styles.discountBadge}>
