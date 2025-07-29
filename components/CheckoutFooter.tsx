@@ -17,19 +17,9 @@ export default function CheckoutFooter() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.cartInfo}>
-          <ShoppingCart color="white" size={20} strokeWidth={2} />
-          <Text style={styles.itemCount}>
-            {state.itemCount} item{state.itemCount !== 1 ? 's' : ''}
-          </Text>
-          <Text style={styles.total}>${state.total.toFixed(2)}</Text>
-        </View>
-        
-        <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
-          <Text style={styles.checkoutText}>Checkout</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
+        <Text style={styles.checkoutText}>Checkout</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -40,46 +30,22 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#007AFF',
-    paddingBottom: 34, // Safe area padding for home indicator
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 24,
-    paddingVertical: 16,
-  },
-  cartInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  itemCount: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-    marginLeft: 8,
-  },
-  total: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: '700',
-    marginLeft: 16,
+    paddingBottom: 34, // Safe area padding for home indicator
   },
   checkoutButton: {
-    backgroundColor: 'white',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
+    backgroundColor: '#007AFF',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   checkoutText: {
-    color: '#007AFF',
+    color: 'white',
     fontSize: 16,
     fontWeight: '600',
   },

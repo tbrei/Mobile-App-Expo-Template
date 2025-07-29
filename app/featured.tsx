@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { ArrowLeft, Star, ShoppingCart, Heart, TrendingUp, Award, Zap } from 'lucide-react-native';
-import { useCart } from '@/contexts/CartContext';
+import { ArrowLeft, TrendingUp, Award, Zap } from 'lucide-react-native';
+import ProductCard from '@/components/ProductCard';
+import CheckoutFooter from '@/components/CheckoutFooter';
 
 export default function FeaturedScreen() {
-  const { addItem } = useCart();
   const featuredSections = [
     {
       id: 'trending',
@@ -22,8 +22,8 @@ export default function FeaturedScreen() {
           rating: 4.8,
           reviews: 324,
           image: 'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=800',
-          badge: 'Hot',
-          trendingRank: 1,
+          inStock: true,
+          discount: 25,
         },
         {
           id: 2,
@@ -32,8 +32,7 @@ export default function FeaturedScreen() {
           rating: 4.9,
           reviews: 156,
           image: 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=800',
-          badge: 'New',
-          trendingRank: 2,
+          inStock: true,
         },
       ]
     },
@@ -52,7 +51,8 @@ export default function FeaturedScreen() {
           rating: 4.7,
           reviews: 89,
           image: 'https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?auto=compress&cs=tinysrgb&w=800',
-          badge: "Editor's Pick",
+          inStock: true,
+          discount: 25,
         },
         {
           id: 4,
@@ -61,7 +61,7 @@ export default function FeaturedScreen() {
           rating: 4.6,
           reviews: 203,
           image: 'https://images.pexels.com/photos/4526414/pexels-photo-4526414.jpeg?auto=compress&cs=tinysrgb&w=800',
-          badge: 'Recommended',
+          inStock: true,
         },
       ]
     },
@@ -80,8 +80,8 @@ export default function FeaturedScreen() {
           rating: 4.5,
           reviews: 67,
           image: 'https://images.pexels.com/photos/163100/circuit-circuit-board-resistor-computer-163100.jpeg?auto=compress&cs=tinysrgb&w=800',
-          badge: '20% OFF',
-          timeLeft: '2h 15m',
+          inStock: true,
+          discount: 20,
         },
         {
           id: 6,
@@ -91,8 +91,8 @@ export default function FeaturedScreen() {
           rating: 4.8,
           reviews: 445,
           image: 'https://images.pexels.com/photos/2115256/pexels-photo-2115256.jpeg?auto=compress&cs=tinysrgb&w=800',
-          badge: 'Flash Sale',
-          timeLeft: '5h 42m',
+          inStock: true,
+          discount: 20,
         },
       ]
     }
@@ -107,17 +107,10 @@ export default function FeaturedScreen() {
     router.push(`/(tabs)/explore?filter=${sectionId}`);
   };
 
-  const handleAddToCart = (product: any) => {
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-    });
-  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
@@ -152,61 +145,15 @@ export default function FeaturedScreen() {
 
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.productsScroll}>
                 {section.products.map((product, index) => (
-                  <TouchableOpacity 
+                  <View
                     key={product.id} 
                     style={[styles.productCard, index === 0 && styles.firstProductCard]}
-                    onPress={() => handleProductPress(product.id)}
                   >
-                    {/* Badge */}
-                    <View style={[styles.badge, { backgroundColor: section.color }]}>
-                      <Text style={styles.badgeText}>{product.badge}</Text>
-                    </View>
-
-                    {/* Trending Rank */}
-                    {product.trendingRank && (
-                      <View style={styles.rankBadge}>
-                        <Text style={styles.rankText}>#{product.trendingRank}</Text>
-                      </View>
-                    )}
-
-                    {/* Time Left for Flash Deals */}
-                    {product.timeLeft && (
-                      <View style={styles.timeBadge}>
-                        <Text style={styles.timeText}>{product.timeLeft}</Text>
-                      </View>
-                    )}
-
-                    <TouchableOpacity style={styles.favoriteButton}>
-                      <Heart color="#8E8E93" size={18} strokeWidth={2} />
-                    </TouchableOpacity>
-                    
-                    <Image source={{ uri: product.image }} style={styles.productImage} />
-                    
-                    <View style={styles.productInfo}>
-                      <Text style={styles.productName} numberOfLines={2}>{product.name}</Text>
-                      
-                      <View style={styles.ratingContainer}>
-                        <Star color="#FF9500" size={14} strokeWidth={2} fill="#FF9500" />
-                        <Text style={styles.ratingText}>{product.rating}</Text>
-                        <Text style={styles.reviewsText}>({product.reviews})</Text>
-                      </View>
-                      
-                      <View style={styles.priceContainer}>
-                        <Text style={styles.price}>${product.price}</Text>
-                        {product.originalPrice && (
-                          <Text style={styles.originalPrice}>${product.originalPrice}</Text>
-                        )}
-                      </View>
-                      
-                      <TouchableOpacity 
-                        style={[styles.addToCartButton, { backgroundColor: section.color }]}
-                        onPress={() => handleAddToCart(product)}
-                      >
-                        <ShoppingCart color="white" size={16} strokeWidth={2} />
-                        <Text style={styles.addToCartText}>Add to Cart</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </TouchableOpacity>
+                    <ProductCard
+                      product={product}
+                      onPress={() => handleProductPress(product.id)}
+                    />
+                  </View>
                 ))}
               </ScrollView>
             </View>
@@ -255,7 +202,9 @@ export default function FeaturedScreen() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+      <CheckoutFooter />
+    </View>
   );
 }
 
@@ -263,6 +212,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F2F7',
+  },
+  safeArea: {
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -330,135 +282,10 @@ const styles = StyleSheet.create({
   },
   productCard: {
     width: 200,
-    backgroundColor: 'white',
-    borderRadius: 16,
     marginRight: 16,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
   },
   firstProductCard: {
     marginLeft: 0,
-  },
-  badge: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    zIndex: 3,
-  },
-  badgeText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  rankBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 50,
-    backgroundColor: '#1C1C1E',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    zIndex: 3,
-  },
-  rankText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  timeBadge: {
-    position: 'absolute',
-    bottom: 12,
-    left: 12,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    zIndex: 3,
-  },
-  timeText: {
-    color: 'white',
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  favoriteButton: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 8,
-    zIndex: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  productImage: {
-    width: '100%',
-    height: 150,
-  },
-  productInfo: {
-    padding: 16,
-  },
-  productName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1C1C1E',
-    marginBottom: 8,
-    lineHeight: 22,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  ratingText: {
-    fontSize: 14,
-    color: '#8E8E93',
-    marginLeft: 4,
-    fontWeight: '500',
-  },
-  reviewsText: {
-    fontSize: 14,
-    color: '#8E8E93',
-    marginLeft: 4,
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  price: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#007AFF',
-  },
-  originalPrice: {
-    fontSize: 14,
-    color: '#8E8E93',
-    textDecorationLine: 'line-through',
-    marginLeft: 8,
-  },
-  addToCartButton: {
-    borderRadius: 8,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  addToCartText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: '600',
-    marginLeft: 6,
   },
   statsContainer: {
     flexDirection: 'row',
