@@ -63,7 +63,12 @@ export default function ProductCard({
   };
 
   return (
-    <TouchableOpacity style={[styles.container, containerStyle]} onPress={() => onPress(product.id)}>
+    <TouchableOpacity 
+      style={[styles.container, containerStyle]} 
+      onPress={() => onPress(product.id)}
+      delayPressIn={100}
+      activeOpacity={0.8}
+    >
       {product.discount && (
         <View style={styles.discountBadge}>
           <Text style={styles.discountText}>-{product.discount}%</Text>

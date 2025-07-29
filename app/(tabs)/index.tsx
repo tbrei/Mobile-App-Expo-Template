@@ -244,6 +244,7 @@ const styles = StyleSheet.create({
   productsScroll: {
     marginHorizontal: -24,
     paddingHorizontal: 24,
+    paddingBottom: 10,
   },
   productCard: {
     width: 200,
@@ -256,6 +257,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 3,
+    marginBottom: 8,
   },
   badge: {
     position: 'absolute',
